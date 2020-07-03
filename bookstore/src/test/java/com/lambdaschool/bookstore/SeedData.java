@@ -3,26 +3,14 @@ package com.lambdaschool.bookstore;
 import com.github.javafaker.Faker;
 import com.github.javafaker.service.FakeValuesService;
 import com.github.javafaker.service.RandomService;
-import com.lambdaschool.foundation.models.Author;
-import com.lambdaschool.foundation.models.Book;
-import com.lambdaschool.foundation.models.Role;
-import com.lambdaschool.foundation.models.Section;
-import com.lambdaschool.foundation.models.User;
-import com.lambdaschool.foundation.models.UserRoles;
-import com.lambdaschool.foundation.models.Useremail;
-import com.lambdaschool.foundation.models.Wrote;
-import com.lambdaschool.foundation.services.AuthorService;
-import com.lambdaschool.foundation.services.BookService;
-import com.lambdaschool.foundation.services.RoleService;
-import com.lambdaschool.foundation.services.SectionService;
-import com.lambdaschool.foundation.services.UserService;
+import com.lambdaschool.bookstore.models.*;
+import com.lambdaschool.bookstore.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 
 /**
@@ -52,10 +40,10 @@ public class SeedData
     AuthorService authorService;
 
     @Autowired
-    BookService bookService;
+    SectionService sectionService;
 
     @Autowired
-    SectionService sectionService;
+    BookService bookService;
 
     /**
      * Generates test, seed data for our application
@@ -72,9 +60,6 @@ public class SeedData
             throws
             Exception
     {
-        /************
-         * Seed Users
-         ************/
         Role r1 = new Role("admin");
         Role r2 = new Role("user");
         Role r3 = new Role("data");
@@ -188,6 +173,7 @@ public class SeedData
          * Seed Books
          ************/
 
+        // Create authors
         Author a1 = new Author("John", "Mitchell");
         Author a2 = new Author("Dan", "Brown");
         Author a3 = new Author("Jerry", "Poe");
@@ -195,6 +181,7 @@ public class SeedData
         Author a5 = new Author("George", "Gallinger");
         Author a6 = new Author("Ian", "Stewart");
 
+        // Save authors to db table
         a1 = authorService.save(a1);
         a2 = authorService.save(a2);
         a3 = authorService.save(a3);
@@ -202,47 +189,43 @@ public class SeedData
         a5 = authorService.save(a5);
         a6 = authorService.save(a6);
 
+        // Create sections
         Section s1 = new Section("Fiction");
         Section s2 = new Section("Technology");
         Section s3 = new Section("Travel");
         Section s4 = new Section("Business");
         Section s5 = new Section("Religion");
 
+        // Save sections to db table
         s1 = sectionService.save(s1);
         s2 = sectionService.save(s2);
         s3 = sectionService.save(s3);
         s4 = sectionService.save(s4);
         s5 = sectionService.save(s5);
 
-        List<Wrote> wrote = new ArrayList<>();
-        wrote.add(new Wrote(a6, new Book()));
+        // Create books
+        // Save book section relationship
+        // Save author book relationship
         Book b1 = new Book("Flatterland", "9780738206752", 2001, s1);
-        b1.setWrotes(wrote);
+        b1.getAuthors().add(new AuthorBooks(a6, b1));
         b1 = bookService.save(b1);
 
-        wrote = new ArrayList<>();
-        wrote.add(new Wrote(a2, new Book()));
         Book b2 = new Book("Digital Fortess", "9788489367012", 2007, s1);
-        b2.setWrotes(wrote);
+        b2.getAuthors().add(new AuthorBooks(a2, b2));
         b2 = bookService.save(b2);
 
-        wrote = new ArrayList<>();
-        wrote.add(new Wrote(a2, new Book()));
         Book b3 = new Book("The Da Vinci Code", "9780307474278", 2009, s1);
-        b3.setWrotes(wrote);
+        b3.getAuthors().add(new AuthorBooks(a2, b3));
         b3 = bookService.save(b3);
 
-        wrote = new ArrayList<>();
-        wrote.add(new Wrote(a5, new Book()));
-        wrote.add(new Wrote(a3, new Book()));
         Book b4 = new Book("Essentials of Finance", "1314241651234", 0, s4);
-        b4.setWrotes(wrote);
+        b4.getAuthors().add(new AuthorBooks(a5, b4));
+        b4.getAuthors().add(new AuthorBooks(a3, b4));
         b4 = bookService.save(b4);
 
-        wrote = new ArrayList<>();
-        wrote.add(new Wrote(a4, new Book()));
         Book b5 = new Book("Calling Texas Home", "1885171382134", 2000, s3);
-        b5.setWrotes(wrote);
+        b5.getAuthors().add(new AuthorBooks(a4, b5));
         b5 = bookService.save(b5);
+
     }
 }
