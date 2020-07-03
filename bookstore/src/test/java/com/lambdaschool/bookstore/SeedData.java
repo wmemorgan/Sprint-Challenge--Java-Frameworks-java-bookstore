@@ -1,17 +1,17 @@
 package com.lambdaschool.bookstore;
 
-import com.lambdaschool.bookstore.models.Role;
-import com.lambdaschool.bookstore.models.User;
-import com.lambdaschool.bookstore.models.UserRoles;
-import com.lambdaschool.bookstore.models.Useremail;
-import com.lambdaschool.bookstore.services.RoleService;
-import com.lambdaschool.bookstore.services.UserService;
+import com.github.javafaker.Faker;
+import com.github.javafaker.service.FakeValuesService;
+import com.github.javafaker.service.RandomService;
+import com.lambdaschool.bookstore.models.*;
+import com.lambdaschool.bookstore.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 /**
  * SeedData puts both known and random data into the database. It implements CommandLineRunner.
@@ -35,6 +35,15 @@ public class SeedData
      */
     @Autowired
     UserService userService;
+
+    @Autowired
+    AuthorService authorService;
+
+    @Autowired
+    SectionService sectionService;
+
+    @Autowired
+    BookService bookService;
 
     /**
      * Generates test, seed data for our application
@@ -131,5 +140,92 @@ public class SeedData
                            "misskitty@school.lambda",
                            users);
         userService.save(u5);
+
+        // using JavaFaker create a bunch of regular users
+        // https://www.baeldung.com/java-faker
+        // https://www.baeldung.com/regular-expressions-java
+
+        FakeValuesService fakeValuesService = new FakeValuesService(new Locale("en-US"),
+                                                                    new RandomService());
+        Faker nameFaker = new Faker(new Locale("en-US"));
+
+        for (int i = 0; i < 25; i++)
+        {
+            new User();
+            User fakeUser;
+
+            users = new ArrayList<>();
+            users.add(new UserRoles(new User(),
+                                    r2));
+            fakeUser = new User(nameFaker.name()
+                                        .username(),
+                                "password",
+                                nameFaker.internet()
+                                        .emailAddress(),
+                                users);
+            fakeUser.getUseremails()
+                    .add(new Useremail(fakeUser,
+                                       fakeValuesService.bothify("????##@gmail.com")));
+            userService.save(fakeUser);
+        }
+
+        /************
+         * Seed Books
+         ************/
+
+        // Create authors
+        Author a1 = new Author("John", "Mitchell");
+        Author a2 = new Author("Dan", "Brown");
+        Author a3 = new Author("Jerry", "Poe");
+        Author a4 = new Author("Wells", "Teague");
+        Author a5 = new Author("George", "Gallinger");
+        Author a6 = new Author("Ian", "Stewart");
+
+        // Save authors to db table
+        a1 = authorService.save(a1);
+        a2 = authorService.save(a2);
+        a3 = authorService.save(a3);
+        a4 = authorService.save(a4);
+        a5 = authorService.save(a5);
+        a6 = authorService.save(a6);
+
+        // Create sections
+        Section s1 = new Section("Fiction");
+        Section s2 = new Section("Technology");
+        Section s3 = new Section("Travel");
+        Section s4 = new Section("Business");
+        Section s5 = new Section("Religion");
+
+        // Save sections to db table
+        s1 = sectionService.save(s1);
+        s2 = sectionService.save(s2);
+        s3 = sectionService.save(s3);
+        s4 = sectionService.save(s4);
+        s5 = sectionService.save(s5);
+
+        // Create books
+        // Save book section relationship
+        // Save author book relationship
+        Book b1 = new Book("Flatterland", "9780738206752", 2001, s1);
+        b1.getAuthors().add(new AuthorBooks(a6, b1));
+        b1 = bookService.save(b1);
+
+        Book b2 = new Book("Digital Fortess", "9788489367012", 2007, s1);
+        b2.getAuthors().add(new AuthorBooks(a2, b2));
+        b2 = bookService.save(b2);
+
+        Book b3 = new Book("The Da Vinci Code", "9780307474278", 2009, s1);
+        b3.getAuthors().add(new AuthorBooks(a2, b3));
+        b3 = bookService.save(b3);
+
+        Book b4 = new Book("Essentials of Finance", "1314241651234", 0, s4);
+        b4.getAuthors().add(new AuthorBooks(a5, b4));
+        b4.getAuthors().add(new AuthorBooks(a3, b4));
+        b4 = bookService.save(b4);
+
+        Book b5 = new Book("Calling Texas Home", "1885171382134", 2000, s3);
+        b5.getAuthors().add(new AuthorBooks(a4, b5));
+        b5 = bookService.save(b5);
+
     }
 }
