@@ -25,7 +25,13 @@ public class Book extends Auditable {
     @OneToMany(mappedBy = "book",
         cascade = CascadeType.ALL)
     @JsonIgnoreProperties(value = "book", allowSetters = true)
-    private List<BookSection> bookSections = new ArrayList<>();
+    private List<BookSection> booksections = new ArrayList<>();
+
+    @OneToMany(mappedBy = "book",
+            cascade = CascadeType.ALL)
+    @JsonIgnoreProperties(value = "book", allowSetters = true)
+    private List<AuthorBooks> authors = new ArrayList<>();
+
 
     public Book() {
     }
@@ -45,22 +51,22 @@ public class Book extends Auditable {
         this.isbn = isbn;
         this.copyrightyear = copyrightyear;
 
-        bookSections.add(new BookSection(this, section));
+        booksections.add(new BookSection(this, section));
     }
 
     public Book(
             String booktitle,
             String isbn,
             int copyrightyear,
-            List<BookSection> bookSections
+            List<BookSection> booksections
             ) {
         this.booktitle = booktitle;
         this.isbn = isbn;
         this.copyrightyear = copyrightyear;
 
-        for (BookSection c : bookSections) {
+        for (BookSection c : booksections) {
             c.setBook(this);
-            this.bookSections.add(c);
+            this.booksections.add(c);
         }
     }
 
@@ -96,11 +102,19 @@ public class Book extends Auditable {
         this.copyrightyear = copyrightyear;
     }
 
-    public List<BookSection> getBookSections() {
-        return bookSections;
+    public List<BookSection> getBooksections() {
+        return booksections;
     }
 
-    public void setBookSections(List<BookSection> bookSections) {
-        this.bookSections = bookSections;
+    public void setBooksections(List<BookSection> booksections) {
+        this.booksections = booksections;
+    }
+
+    public List<AuthorBooks> getAuthors() {
+        return authors;
+    }
+
+    public void setAuthors(List<AuthorBooks> authors) {
+        this.authors = authors;
     }
 }

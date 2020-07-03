@@ -10,12 +10,13 @@ import java.util.Objects;
 @Entity
 @Table(name = "booksection",
     uniqueConstraints = {@UniqueConstraint(columnNames = {"bookid", "sectionid"})})
-public class BookSection implements Serializable {
-
+public class BookSection extends Auditable
+        implements Serializable
+{
     @Id
     @ManyToOne
     @JoinColumn(name = "bookid")
-    @JsonIgnoreProperties(value = "collections",
+    @JsonIgnoreProperties(value = "booksections",
             allowSetters = true)
     private Book book;
 
