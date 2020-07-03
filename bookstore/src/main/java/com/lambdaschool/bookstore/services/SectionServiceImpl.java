@@ -30,7 +30,7 @@ public class SectionServiceImpl implements SectionService {
     }
 
     @Override
-    public Section findBookById(long id) {
+    public Section findSectionById(long id) {
 
         return sectionRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Section id " + id + " not found!"));

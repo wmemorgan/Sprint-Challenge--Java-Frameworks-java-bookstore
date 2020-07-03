@@ -8,6 +8,8 @@ public interface BookService {
 
     List<Book> findAll();
 
+    Book findBookById(long id);
+
     Book save(Book book);
 
     void addBookSection(long bookid, long sectionid);

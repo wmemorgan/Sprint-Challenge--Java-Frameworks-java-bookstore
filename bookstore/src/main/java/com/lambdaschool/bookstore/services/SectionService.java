@@ -8,7 +8,7 @@ public interface SectionService {
 
     List<Section> findAll();
 
-    Section findBookById(long id);
+    Section findSectionById(long id);
 
     Section save(Section section);
 }

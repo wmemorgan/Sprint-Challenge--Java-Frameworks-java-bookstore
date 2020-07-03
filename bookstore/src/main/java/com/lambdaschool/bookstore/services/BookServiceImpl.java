@@ -37,16 +37,26 @@ public class BookServiceImpl
     }
 
     @Override
+    public Book findBookById(long id) {
+        return bookRepository.findById(id)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("" +
+                                "Book id " + id + " not found!"));
+    }
+
+    @Transactional
+    @Override
     public Book save(Book book) {
 
         return bookRepository.save(book);
     }
 
+    @Transactional
     @Override
     public void addBookSection(long bookid, long sectionid) {
         bookRepository.findById(bookid)
                 .orElseThrow(() -> new ResourceNotFoundException("Book id " + bookid + " not found!"));
-        sectionService.findBookById(sectionid);
+        sectionService.findSectionById(sectionid);
 
         if (bookRepository.checkBookSectionCombo(bookid, sectionid)
         .getCount() <= 0) {
