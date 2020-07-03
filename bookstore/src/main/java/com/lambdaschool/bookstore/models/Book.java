@@ -1,15 +1,11 @@
 package com.lambdaschool.bookstore.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import io.swagger.annotations.ApiModelProperty;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * The entity allowing interaction with the books table
- */
 @Entity
 @Table(name = "books")
 public class Book extends Auditable {
@@ -26,38 +22,52 @@ public class Book extends Auditable {
 
     private int copyrightyear;
 
-    @OneToOne(mappedBy = "book")
-    private SectionBooks sectionBooks;
-
-    /**
-     * Part of the join relationship between book and author
-     * connects books to the book author combination
-     */
-    @ApiModelProperty(name = "authors",
-            value = "List of authors for this book")
     @OneToMany(mappedBy = "book",
-        cascade = CascadeType.ALL,
-        orphanRemoval = true)
-    @JsonIgnoreProperties(value = "book",
-        allowSetters = true)
+        cascade = CascadeType.ALL)
+    @JsonIgnoreProperties(value = "book", allowSetters = true)
+    private List<BookSection> booksections = new ArrayList<>();
+
+    @OneToMany(mappedBy = "book",
+            cascade = CascadeType.ALL)
+    @JsonIgnoreProperties(value = "book", allowSetters = true)
     private List<AuthorBooks> authors = new ArrayList<>();
+
 
     public Book() {
     }
 
-    public Book(String booktitle, String isbn, int copyrightyear, SectionBooks sectionBooks) {
+    public Book(String booktitle, String isbn, int copyrightyear) {
         this.booktitle = booktitle;
         this.isbn = isbn;
         this.copyrightyear = copyrightyear;
-        this.sectionBooks = sectionBooks;
     }
 
-    public Book(String booktitle, String isbn, int copyrightyear, SectionBooks sectionBooks, List<AuthorBooks> authors) {
+    public Book(
+            String booktitle,
+            String isbn,
+            int copyrightyear,
+            Section section) {
         this.booktitle = booktitle;
         this.isbn = isbn;
         this.copyrightyear = copyrightyear;
-        this.sectionBooks = sectionBooks;
-        this.authors = authors;
+
+        booksections.add(new BookSection(this, section));
+    }
+
+    public Book(
+            String booktitle,
+            String isbn,
+            int copyrightyear,
+            List<BookSection> booksections
+            ) {
+        this.booktitle = booktitle;
+        this.isbn = isbn;
+        this.copyrightyear = copyrightyear;
+
+        for (BookSection c : booksections) {
+            c.setBook(this);
+            this.booksections.add(c);
+        }
     }
 
     public long getBookid() {
@@ -92,12 +102,12 @@ public class Book extends Auditable {
         this.copyrightyear = copyrightyear;
     }
 
-    public SectionBooks getSectionBooks() {
-        return sectionBooks;
+    public List<BookSection> getBooksections() {
+        return booksections;
     }
 
-    public void setSectionBooks(SectionBooks sectionBooks) {
-        this.sectionBooks = sectionBooks;
+    public void setBooksections(List<BookSection> booksections) {
+        this.booksections = booksections;
     }
 
     public List<AuthorBooks> getAuthors() {

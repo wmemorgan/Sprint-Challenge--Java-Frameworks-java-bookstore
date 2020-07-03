@@ -3,21 +3,15 @@ package com.lambdaschool.bookstore.models;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
+import java.io.Serializable;
+import java.util.Objects;
 
-/**
- * The entity allowing interaction with the authorbooks table.
- * The join table between authors and books.
- * <p>
- * Table enforces a unique constraint of the combination of authorid and bookid.
- * These two together form the primary key.
- * <p>
- * When you have a compound primary key, you must implement Serializable for Hibernate
- * When you implement Serializable you must implement equals and hash code
- */
 @Entity
 @Table(name = "authorbooks",
-        uniqueConstraints = {@UniqueConstraint(columnNames = {"authorid", "bookid"})})
-public class AuthorBooks extends Auditable {
+    uniqueConstraints = {@UniqueConstraint(columnNames = {"authorid", "bookid"})})
+public class AuthorBooks extends Auditable
+        implements Serializable
+{
 
     @Id
     @ManyToOne
@@ -55,5 +49,19 @@ public class AuthorBooks extends Auditable {
 
     public void setBook(Book book) {
         this.book = book;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        AuthorBooks that = (AuthorBooks) o;
+        return author.equals(that.author) &&
+                book.equals(that.book);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(author, book);
     }
 }

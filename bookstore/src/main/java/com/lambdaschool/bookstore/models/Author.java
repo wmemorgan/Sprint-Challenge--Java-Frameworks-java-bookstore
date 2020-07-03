@@ -1,15 +1,11 @@
 package com.lambdaschool.bookstore.models;
 
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * The entity allowing interaction with the authors table
- */
 @Entity
 @Table(name = "authors")
 public class Author extends Auditable {
@@ -23,18 +19,17 @@ public class Author extends Auditable {
     private String firstname;
 
     @OneToMany(mappedBy = "author",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true)
+        cascade = CascadeType.ALL)
     @JsonIgnoreProperties(value = "author",
-            allowSetters = true)
+     allowSetters = true)
     private List<AuthorBooks> books = new ArrayList<>();
 
     public Author() {
     }
 
-    public Author(String lastname, String firstname) {
-        this.lastname = lastname;
+    public Author(String firstname, String lastname) {
         this.firstname = firstname;
+        this.lastname = lastname;
     }
 
     public long getAuthorid() {
@@ -45,20 +40,20 @@ public class Author extends Auditable {
         this.authorid = authorid;
     }
 
-    public String getLastname() {
-        return lastname;
-    }
-
-    public void setLastname(String lastname) {
-        this.lastname = lastname;
-    }
-
     public String getFirstname() {
         return firstname;
     }
 
     public void setFirstname(String firstname) {
         this.firstname = firstname;
+    }
+
+    public String getLastname() {
+        return lastname;
+    }
+
+    public void setLastname(String lastname) {
+        this.lastname = lastname;
     }
 
     public List<AuthorBooks> getBooks() {
