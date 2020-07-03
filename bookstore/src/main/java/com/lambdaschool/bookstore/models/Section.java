@@ -23,12 +23,12 @@ public class Section extends Auditable {
 
     @ApiModelProperty(name = "section books",
             value = "List of books in this section")
-    @OneToMany(mappedBy = "book",
+    @OneToMany(mappedBy = "section",
             cascade = CascadeType.ALL,
             orphanRemoval = true)
-    @JsonIgnoreProperties(value = "book",
+    @JsonIgnoreProperties(value = "section",
             allowSetters = true)
-    private List<Book> books = new ArrayList<>();
+    private List<SectionBooks> books = new ArrayList<>();
 
     public Section() {
     }
@@ -53,11 +53,11 @@ public class Section extends Auditable {
         this.sectionname = sectionname;
     }
 
-    public List<Book> getBooks() {
+    public List<SectionBooks> getBooks() {
         return books;
     }
 
-    public void setBooks(List<Book> books) {
+    public void setBooks(List<SectionBooks> books) {
         this.books = books;
     }
 }
