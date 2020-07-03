@@ -1,4 +1,4 @@
-package com.lambdaschool.foundation;
+package com.lambdaschool.bookstore;
 
 import com.github.javafaker.Faker;
 import com.github.javafaker.service.FakeValuesService;
