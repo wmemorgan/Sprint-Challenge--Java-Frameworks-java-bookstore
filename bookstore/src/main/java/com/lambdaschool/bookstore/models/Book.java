@@ -23,12 +23,14 @@ public class Book extends Auditable {
     private int copyrightyear;
 
     @OneToMany(mappedBy = "book",
-        cascade = CascadeType.ALL)
+        cascade = CascadeType.ALL,
+        orphanRemoval = true)
     @JsonIgnoreProperties(value = "book", allowSetters = true)
     private List<BookSection> booksections = new ArrayList<>();
 
     @OneToMany(mappedBy = "book",
-            cascade = CascadeType.ALL)
+            cascade = CascadeType.ALL,
+            orphanRemoval = true)
     @JsonIgnoreProperties(value = "book", allowSetters = true)
     private List<AuthorBooks> authors = new ArrayList<>();
 

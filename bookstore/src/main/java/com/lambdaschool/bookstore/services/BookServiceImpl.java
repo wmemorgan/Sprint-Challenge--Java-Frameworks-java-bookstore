@@ -53,6 +53,16 @@ public class BookServiceImpl
 
     @Transactional
     @Override
+    public void delete(long bookid) {
+        bookRepository.findById(bookid)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException(
+                                "Book id " + bookid + " not found!"));
+        bookRepository.deleteById(bookid);
+    }
+
+    @Transactional
+    @Override
     public void addBookSection(long bookid, long sectionid) {
         bookRepository.findById(bookid)
                 .orElseThrow(() -> new ResourceNotFoundException("Book id " + bookid + " not found!"));
