@@ -21,13 +21,16 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.junit.Assert.assertEquals;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
 
@@ -185,9 +188,28 @@ public class BookControllerTest
     }
 
     @Test
-    public void addNewBook() throws
-            Exception
-    {
+    public void addNewBook() throws Exception {
+
+        // Test data
+        Section section = new Section("Fiction");
+        Book book = new Book("The Shadow Rising",
+                "9780312854317", 1992, section);
+
+        String apiUrl = "/books/book";
+        ObjectMapper mapper = new ObjectMapper();
+        String bookString = mapper.writeValueAsString(book);
+
+        Mockito.when(bookService.save(any(Book.class)))
+                .thenReturn(book);
+
+        RequestBuilder rb = MockMvcRequestBuilders.post(apiUrl)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .content(bookString);
+
+        mockMvc.perform(rb)
+                .andExpect(status().isCreated())
+                .andDo(MockMvcResultHandlers.print());
     }
 
     @Test
@@ -196,8 +218,15 @@ public class BookControllerTest
     }
 
     @Test
-    public void deleteBookById() throws
-            Exception
-    {
+    public void deleteBookById() throws Exception {
+        String apiUrl = "/books/book/{bookid}";
+
+        RequestBuilder rb = MockMvcRequestBuilders.delete(apiUrl, "30")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON);
+
+        mockMvc.perform(rb)
+                .andExpect(status().isOk())
+                .andDo(MockMvcResultHandlers.print());
     }
 }
