@@ -10,6 +10,8 @@ public interface SectionService
 
     Section findSectionById(long id);
 
+    Section findSectionByName(String name);
+
     void delete(long id);
 
     Section save(Section role);

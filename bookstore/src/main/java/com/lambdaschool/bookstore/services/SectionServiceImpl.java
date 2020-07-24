@@ -37,6 +37,18 @@ public class SectionServiceImpl
                 .orElseThrow(() -> new ResourceNotFoundException("Section with id " + id + " Not Found!"));
     }
 
+    @Override
+    public Section findSectionByName(String name) {
+        Section section = sectionrepos.findSectionByName(name);
+
+        if (section == null) {
+            throw new ResourceNotFoundException("Section " + name + " not found");
+        }
+
+        return section;
+
+    }
+
     @Transactional
     @Override
     public void delete(long id)
