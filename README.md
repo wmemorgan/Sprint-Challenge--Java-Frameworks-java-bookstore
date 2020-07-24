@@ -71,7 +71,7 @@ Be prepared to demonstrate your understanding of this week's concepts by answeri
 
 - [ ] You will be creating a REST api service to store and read data from a database. You should be able to switch between an H2 database and a PostgreSQL database by using an application.properties setting.
 
-- [ ] Please fork and clone this repository. This repository does have a starter project. The provided initial application has the basics in place. Note that if you start with the initial project, all the following are done for you!!!
+- [x] Please fork and clone this repository. This repository does have a starter project. The provided initial application has the basics in place. Note that if you start with the initial project, all the following are done for you!!!
 
 - Auditing fields
 - Exception Handling
@@ -97,23 +97,23 @@ Be prepared to demonstrate your understanding of this week's concepts by answeri
   - [ ] PUT /books/book/{id} - any user with role ADMIN can access
   - [ ] DELETE /books/book/{id}
 
-- [ ] When a client tries searching for or updating a book that does not exist, a generic exception is sent back to the client. Change this so our custom exception ResourceNotFoundException is returned instead.
+- [x] When a client tries searching for or updating a book that does not exist, a generic exception is sent back to the client. Change this so our custom exception ResourceNotFoundException is returned instead.
 
-- [ ] Add unit test for the Book Service using the database as test data. The structure is already in place, you just need to write the tests for the following:
-  - [ ] findAll
-  - [ ] findBookById that succeeds
-  - [ ] findBookById that fails
-  - [ ] delete
-  - [ ] save a new book
+- [x] Add unit test for the Book Service using the database as test data. The structure is already in place, you just need to write the tests for the following:
+  - [x] findAll
+  - [x] findBookById that succeeds
+  - [x] findBookById that fails
+  - [x] delete
+  - [x] save a new book
 
-- [ ] Add unit tests for the Book Controller NOT relying on the database as test data. The structure is already in place, you need to set up the data and write the tests for the following:
-  - [ ] listAllBooks
-  - [ ] getBookById that succeeds
-  - [ ] getBookById that fails
-  - [ ] addNewBook
-  - [ ] deleteBookById
+- [x] Add unit tests for the Book Controller NOT relying on the database as test data. The structure is already in place, you need to set up the data and write the tests for the following:
+  - [x] listAllBooks
+  - [x] getBookById that succeeds
+  - [x] getBookById that fails
+  - [x] addNewBook
+  - [x] deleteBookById
 
-- [ ] And now that we have a good system, deploy the system to Heroku using PostgreSQL. Your application should be switchable between H2 and PostgreSQL through setting a variable in application.properties
+- [x] And now that we have a good system, deploy the system to Heroku using PostgreSQL. Your application should be switchable between H2 and PostgreSQL through setting a variable in application.properties
 
 ### Task 3: Stretch Goals
 
